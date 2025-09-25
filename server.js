@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 // ------------------------------------
 
 app.get('/', (req, res) => {
-  res.send('Hello from DevOps Pipeline Demo!');
+  res.send('Hello from our Level 4 Manual Deployment!');
 });
 
 app.get('/health', (req, res) => {
