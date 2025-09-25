@@ -1,6 +1,7 @@
 name: CI/CD Pipeline
 
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -20,7 +21,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKOCKERHUB_USER }}
+          username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
 
       - name: Set up Docker Buildx
@@ -36,9 +37,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: http://52.62.52.80
     steps:
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -51,6 +49,6 @@ jobs:
             docker stop app || true
             docker rm app || true
             docker run -d --name app -p 80:3000 --restart=always \
-              -e APP_VERSION="4.0-approved" \
+              -e APP_VERSION="4.0-manual-trigger" \
               tinluong043/devops-demo:staging
             docker image prune -f
