@@ -17,4 +17,4 @@ jobs:
       with:
         push: true
         platforms: linux/amd64,linux/arm64
-        tags: docker.io/hanguyen1502/devops-demo:staging
+        tags: docker.io/tinluong043/devops-demo:staging
