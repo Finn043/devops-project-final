@@ -39,7 +39,17 @@ app.use((req, res, next) => {
 // ------------------------------------
 
 app.get('/', (req, res) => {
-  res.send('Hello from our Level 4 Manual Deployment!');
+  const coverPageHtml = `
+    <body style="font-family: Arial, sans-serif; background-color: #f0f2f5; color: #333; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center;">
+      <div style="background-color: white; padding: 40px 60px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+        <h1 style="color: #0056b3; font-size: 2.5em; margin-bottom: 10px;">SWE40006 - Software Deployment and Evolution</h1>
+        <h2 style="color: #555; font-size: 1.8em; margin-top: 0; margin-bottom: 30px;">Group Project</h2>
+        <p style="font-size: 1.2em; margin: 10px 0;"><strong>Group Name:</strong> Group 1</p>
+        <p style="font-size: 1.2em; margin: 10px 0;"><strong>Class:</strong> Wednesday 16:30</p>
+      </div>
+    </body>
+  `;
+  res.send(coverPageHtml);
 });
 
 app.get('/health', (req, res) => {
