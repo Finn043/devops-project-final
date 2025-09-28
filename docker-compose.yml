@@ -1,6 +1,6 @@
 services:
   app:
-    image: docker.io/hanguyen1502/devops-demo:staging
+    image: docker.io/tinluong043/devops-demo:staging
     ports: ["3001:3000"]
     restart: unless-stopped
     environment:
