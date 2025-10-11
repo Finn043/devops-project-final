@@ -81,7 +81,7 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically:
 2. Sets up Node.js 20 environment
 3. Installs dependencies and runs tests
 4. Builds multi-platform Docker images (linux/amd64, linux/arm64)
-5. Pushes images to Docker Hub wit `staging` tag
+5. Pushes images to Docker Hub with `staging` tag
 
 ### Setup Requirements
 
