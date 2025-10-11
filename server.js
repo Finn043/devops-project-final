@@ -165,6 +165,7 @@ app.get('/', (req, res) => {
             <a href="/products/laptops" class="nav-link">Laptops</a>
             <a href="/products/tablets" class="nav-link">Tablets</a>
             <a href="/products/accessories" class="nav-link">Accessories</a>
+            <a href="/help" class="nav-link">Help Center</a>
             <a href="/cart" class="nav-link cart-link">Cart (<span id="cart-count">0</span>)</a>
           </nav>
         </div>
@@ -362,6 +363,7 @@ app.get('/products/:category', (req, res) => {
             <a href="/products/laptops" class="nav-link ${category === 'laptops' ? 'active' : ''}">Laptops</a>
             <a href="/products/tablets" class="nav-link ${category === 'tablets' ? 'active' : ''}">Tablets</a>
             <a href="/products/accessories" class="nav-link ${category === 'accessories' ? 'active' : ''}">Accessories</a>
+            <a href="/help" class="nav-link">Help Center</a>
             <a href="/cart" class="nav-link cart-link">Cart (<span id="cart-count">0</span>)</a>
           </nav>
         </div>
@@ -458,6 +460,7 @@ app.get('/product/:id', (req, res) => {
             <a href="/products/laptops" class="nav-link">Laptops</a>
             <a href="/products/tablets" class="nav-link">Tablets</a>
             <a href="/products/accessories" class="nav-link">Accessories</a>
+            <a href="/help" class="nav-link">Help Center</a>
             <a href="/cart" class="nav-link cart-link">Cart (<span id="cart-count">0</span>)</a>
           </nav>
         </div>
@@ -565,6 +568,7 @@ app.get('/cart', (req, res) => {
             <a href="/products/laptops" class="nav-link">Laptops</a>
             <a href="/products/tablets" class="nav-link">Tablets</a>
             <a href="/products/accessories" class="nav-link">Accessories</a>
+            <a href="/help" class="nav-link">Help Center</a>
             <a href="/cart" class="nav-link cart-link active">Cart (<span id="cart-count">0</span>)</a>
           </nav>
         </div>
@@ -669,6 +673,308 @@ app.get('/cart', (req, res) => {
     </html>
   `;
   res.send(cartHtml);
+});
+
+// Help Center page
+app.get('/help', (req, res) => {
+  const helpCenterHtml = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Help Center - TechStore</title>
+      <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body>
+      <header class="header">
+        <div class="container">
+          <h1 class="logo"><a href="/">TechStore</a></h1>
+          <nav class="nav">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/products/smartphones" class="nav-link">Smartphones</a>
+            <a href="/products/laptops" class="nav-link">Laptops</a>
+            <a href="/products/tablets" class="nav-link">Tablets</a>
+            <a href="/products/accessories" class="nav-link">Accessories</a>
+            <a href="/help" class="nav-link active">Help Center</a>
+            <a href="/cart" class="nav-link cart-link">Cart (<span id="cart-count">0</span>)</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="container">
+          <div class="help-center">
+            <h1 class="help-title">Help Center</h1>
+            <p class="help-subtitle">Find answers to frequently asked questions and get support</p>
+
+            <!-- Quick Help Categories -->
+            <div class="help-categories">
+              <div class="help-category-card" onclick="showSection('orders')">
+                <div class="help-icon">📦</div>
+                <h3>Orders & Shipping</h3>
+                <p>Track orders, shipping info, and delivery questions</p>
+              </div>
+              <div class="help-category-card" onclick="showSection('returns')">
+                <div class="help-icon">↩️</div>
+                <h3>Returns & Refunds</h3>
+                <p>Return policy, refund process, and exchanges</p>
+              </div>
+              <div class="help-category-card" onclick="showSection('products')">
+                <div class="help-icon">💻</div>
+                <h3>Product Support</h3>
+                <p>Technical support and product information</p>
+              </div>
+              <div class="help-category-card" onclick="showSection('account')">
+                <div class="help-icon">👤</div>
+                <h3>Account & Payment</h3>
+                <p>Account issues and payment methods</p>
+              </div>
+            </div>
+
+            <!-- FAQ Sections -->
+            <div id="orders" class="faq-section">
+              <h2>Orders & Shipping</h2>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>How can I track my order?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Once your order ships, you'll receive a tracking number via email. You can use this number to track your package on our shipping partner's website. Orders typically arrive within 3-7 business days.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>What are your shipping options?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>We offer free standard shipping (5-7 days), expedited shipping (2-3 days) for $9.99, and overnight shipping for $19.99. Free shipping is available on orders over $50.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>Can I change or cancel my order?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>You can modify or cancel your order within 1 hour of placing it. After that, the order enters our fulfillment process and cannot be changed. Please contact customer service immediately if you need assistance.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="returns" class="faq-section" style="display: none;">
+              <h2>Returns & Refunds</h2>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>What is your return policy?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>We offer a 30-day return policy for most items. Products must be in original condition with all accessories and packaging. Electronics have a 14-day return window due to hygiene and security reasons.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>How do I return an item?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Contact our customer service to initiate a return. We'll provide you with a prepaid return label and instructions. Once we receive and inspect the item, your refund will be processed within 5-7 business days.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>When will I receive my refund?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Refunds are processed within 5-7 business days after we receive your returned item. The refund will appear on your original payment method within 1-2 billing cycles depending on your bank or credit card company.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="products" class="faq-section" style="display: none;">
+              <h2>Product Support</h2>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>Are your products authentic and new?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Yes, all our products are 100% authentic and brand new. We work directly with authorized distributors and manufacturers to ensure authenticity and quality. All items come with manufacturer warranties.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>Do you offer technical support?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>We provide basic setup guidance and troubleshooting. For detailed technical support, please contact the manufacturer directly using the warranty information included with your product.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>What if my product arrives damaged?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>If your product arrives damaged, please contact us within 48 hours with photos of the damage. We'll arrange for a replacement or full refund immediately. We package all items carefully, but shipping damage can occasionally occur.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="account" class="faq-section" style="display: none;">
+              <h2>Account & Payment</h2>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>What payment methods do you accept?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>We accept all major credit cards (Visa, MasterCard, American Express, Discover), PayPal, Apple Pay, Google Pay, and bank transfers. All payments are processed securely with SSL encryption.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>Is my payment information secure?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>Yes, we use industry-standard SSL encryption and comply with PCI DSS standards. Your payment information is never stored on our servers and is processed securely through our payment partners.</p>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                  <span>Do I need to create an account to purchase?</span>
+                  <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                  <p>No, you can checkout as a guest. However, creating an account allows you to track orders, save addresses, view purchase history, and receive exclusive offers.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+              <h2>Still Need Help?</h2>
+              <p>Can't find what you're looking for? Our customer service team is here to help!</p>
+              
+              <div class="contact-methods">
+                <div class="contact-method">
+                  <div class="contact-icon">📧</div>
+                  <h4>Email Support</h4>
+                  <p>support@techstore.com</p>
+                  <small>Response within 24 hours</small>
+                </div>
+                <div class="contact-method">
+                  <div class="contact-icon">📞</div>
+                  <h4>Phone Support</h4>
+                  <p>1-800-TECH-HELP</p>
+                  <small>Mon-Fri 9AM-6PM EST</small>
+                </div>
+                <div class="contact-method">
+                  <div class="contact-icon">💬</div>
+                  <h4>Live Chat</h4>
+                  <p>Available on our website</p>
+                  <small>Mon-Fri 9AM-9PM EST</small>
+                </div>
+              </div>
+
+              <div class="contact-form">
+                <h3>Send us a message</h3>
+                <form onsubmit="submitContactForm(event)">
+                  <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" id="name" name="name" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <select id="subject" name="subject" required>
+                      <option value="">Select a topic</option>
+                      <option value="order">Order Question</option>
+                      <option value="return">Return/Refund</option>
+                      <option value="product">Product Support</option>
+                      <option value="payment">Payment Issue</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <div class="container">
+          <p>&copy; 2024 TechStore - Group Melvin Final | SWE40006</p>
+        </div>
+      </footer>
+
+      <script>
+        function showSection(sectionId) {
+          // Hide all sections
+          const sections = document.querySelectorAll('.faq-section');
+          sections.forEach(section => section.style.display = 'none');
+          
+          // Show selected section
+          document.getElementById(sectionId).style.display = 'block';
+          
+          // Scroll to section
+          document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleFAQ(element) {
+          const faqItem = element.parentNode;
+          const answer = faqItem.querySelector('.faq-answer');
+          const icon = element.querySelector('.faq-icon');
+          
+          if (answer.style.display === 'block') {
+            answer.style.display = 'none';
+            icon.textContent = '+';
+            faqItem.classList.remove('active');
+          } else {
+            answer.style.display = 'block';
+            icon.textContent = '−';
+            faqItem.classList.add('active');
+          }
+        }
+
+        function submitContactForm(event) {
+          event.preventDefault();
+          alert('Thank you for your message! We will get back to you within 24 hours.');
+          event.target.reset();
+        }
+
+        async function updateCartCount() {
+          try {
+            const response = await fetch('/api/cart');
+            const cart = await response.json();
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+          } catch (error) {
+            console.error('Error updating cart count:', error);
+          }
+        }
+
+        updateCartCount();
+      </script>
+    </body>
+    </html>
+  `;
+  res.send(helpCenterHtml);
 });
 
 app.get('/api/ping', (req, res) => {
