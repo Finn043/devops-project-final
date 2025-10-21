@@ -13,8 +13,8 @@ const port = 3000;
 const products = [
   {
     id: 1,
-    name: "iPhone 15 Pro",
-    price: 1000,
+    name: "iPhone 15 Pro (new version)",
+    price: 5000,
     category: "smartphones",
     description: "The latest iPhone with advanced camera system and titanium design",
     image: "/images/iphone15pro.jpg",
