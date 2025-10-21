@@ -14,7 +14,7 @@ const products = [
   {
     id: 1,
     name: "iPhone 15 Pro",
-    price: 999,
+    price: 1000,
     category: "smartphones",
     description: "The latest iPhone with advanced camera system and titanium design",
     image: "/images/iphone15pro.jpg",
@@ -174,8 +174,8 @@ app.get('/', (req, res) => {
       <main class="main">
         <section class="hero">
           <div class="container">
-            <h2>Premium Technology Devices</h2>
-            <p>Discover the latest smartphones, laptops, tablets, and accessories</p>
+            <h2>🚀 LIVE DEMO - Premium Technology Devices</h2>
+            <p>🎯 CI/CD Pipeline Demo - Latest smartphones, laptops, tablets, and accessories</p>
           </div>
         </section>
 
