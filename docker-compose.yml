@@ -1,8 +1,23 @@
+# Docker Compose Configuration for TechStore Ecommerce Application
+# Group Melvin Final - SWE40006 DevOps Project
+# 
+# This file defines how to run the application locally using Docker
+# Usage: docker-compose up -d
+
 services:
+  # Main application service
   app:
+    # Docker image from Docker Hub (built by CI/CD pipeline)
     image: docker.io/tinluong043/devops-demo:staging
+    
+    # Port mapping: localhost:3001 -> container:3000
+    # This allows accessing the app at http://localhost:3001
     ports: ["3001:3000"]
+    
+    # Restart policy: restart unless manually stopped
     restart: unless-stopped
+    
+    # Environment variables for the application
     environment:
-      - APP_VERSION=1.0.local
-      - GIT_SHA=dev
+      - APP_VERSION=1.0.local    # Version identifier for local development
+      - GIT_SHA=dev             # Git commit hash (dev for local)

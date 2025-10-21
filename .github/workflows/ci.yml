@@ -1,56 +1,79 @@
+# CI/CD Pipeline for TechStore Ecommerce Application
+# Group Melvin Final - SWE40006 DevOps Project
 name: CI/CD Pipeline
 
+# Trigger: Runs on every push to any branch
 on: [push]
 
 jobs:
+  # BUILD JOB - Handles testing, building, and pushing Docker image
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Uses latest Ubuntu runner
     steps:
+      # Step 1: Get the source code from repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Set up Node.js environment for our application
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20'  # Using Node.js version 20 (LTS)
 
+      # Step 3: Install dependencies and run tests
+      # npm ci = clean install (faster & more reliable than npm install)
       - name: Install dependencies and test
         run: npm ci && npm test
 
+      # Step 4: Authenticate with Docker Hub for image pushing
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASS }}
+          username: ${{ secrets.DOCKERHUB_USER }}    # Stored in GitHub secrets
+          password: ${{ secrets.DOCKERHUB_PASS }}    # Stored in GitHub secrets
 
+      # Step 5: Set up Docker Buildx for multi-platform builds
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      # Step 6: Build Docker image and push to Docker Hub
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           push: true
-          platforms: linux/amd64,linux/arm64
-          tags: docker.io/tinluong043/devops-demo:staging
+          platforms: linux/amd64,linux/arm64  # Multi-architecture support
+          tags: docker.io/tinluong043/devops-demo:staging  # Image tag
 
+  # DEPLOY JOB - Handles deployment to production server
   deploy:
-    needs: build
+    needs: build  # Only runs after build job succeeds
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: http://52.62.52.80
+      url: http://52.62.52.80  # Production server URL
     steps:
+      # Deploy to AWS EC2 instance via SSH
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.EC2_HOST }}      # EC2 instance IP
+          username: ${{ secrets.EC2_USER }}  # SSH username
+          key: ${{ secrets.EC2_SSH_KEY }}    # SSH private key
           script: |
+            # Pull latest Docker image from Docker Hub
             docker pull tinluong043/devops-demo:staging
+            
+            # Stop and remove existing container (|| true prevents failure)
             docker stop app || true
             docker rm app || true
+            
+            # Run new container with:
+            # - Port mapping: 80 (external) -> 3000 (internal)
+            # - Auto-restart policy
+            # - Environment variable for app version
             docker run -d --name app -p 80:3000 --restart=always \
               -e APP_VERSION="4.0-approved" \
               tinluong043/devops-demo:staging
+            
+            # Clean up unused Docker images to save space
             docker image prune -f
