@@ -7,7 +7,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
 
 // Sample technology products data
 const products = [
@@ -986,6 +985,4 @@ app.get('/metrics', async (req, res) => {
   res.end(await register.metrics());
 });
 
-app.listen(port, () => {
-  console.log(`Server starting on http://localhost:${port}`);
-});
+export default app; // Export the app for testing

@@ -6,32 +6,40 @@
   "main": "server.js",
   "author": "Group Melvin Final - SWE40006",
   "license": "MIT",
-  "keywords": ["ecommerce", "nodejs", "express", "devops", "prometheus"],
-  
+  "keywords": [
+    "ecommerce",
+    "nodejs",
+    "express",
+    "devops",
+    "prometheus"
+  ],
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "node -e \"process.exit(0)\"",
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "lint": "echo 'Linting would run here'",
     "build": "echo 'Build process would run here'",
     "docker:build": "docker build -t techstore .",
     "docker:run": "docker run -p 3000:3000 techstore"
   },
-  
   "dependencies": {
     "express": "^4.19.2",
     "prom-client": "^15.1.3"
   },
-  
-  "devDependencies": {},
-  
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.4"
+  },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
   },
-  
   "repository": {
     "type": "git",
     "url": "https://github.com/Finn043/devops-project-final.git"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
   }
 }

@@ -34,4 +34,4 @@ EXPOSE 3000
 
 # Start the application
 # Using exec form (JSON array) for better signal handling
-CMD ["node","server.js"]
+CMD ["node","index.js"]
