@@ -1,41 +1,52 @@
-# DevOps Pipeline Demo
+# TechStore - E-commerce DevOps Project
 
-A complete CI/CD pipeline demonstration using Node.js, Express, Docker, GitHub Actions, and Prometheus metrics.
+A production-ready e-commerce web application for technology devices with complete CI/CD pipeline implementation.
+
+**Group Melvin Final - SWE40006 DevOps Project**
 
 ## Project Overview
 
-This project demonstrates a production-ready DevOps pipeline with:
-- Node.js/Express application with health monitoring
-- Prometheus metrics integration
-- Docker containerization
-- GitHub Actions CI/CD pipeline
-- Multi-platform Docker image builds (AMD64/ARM64)
-- Automated deployment to Docker Hub
+TechStore is a full-featured e-commerce platform demonstrating modern DevOps practices including:
+- Complete CI/CD pipeline with automated testing and deployment
+- Multi-stage deployment (Staging → Production with manual approval)
+- Containerization with Docker and multi-platform support
+- Production monitoring with Prometheus metrics
+- Automated deployment to AWS EC2 instances
 
 ## Application Features
 
-- **Main endpoint** (`/`): Returns welcome message
-- **Health check** (`/health`): Application health status
-- **API endpoint** (`/api/ping`): Returns timestamp
-- **Metrics endpoint** (`/metrics`): Prometheus metrics for monitoring
+### E-commerce Functionality
+- **Product Catalog**: Browse smartphones, laptops, tablets, and accessories
+- **Product Categories**: Filtered views by category
+- **Product Details**: Detailed specifications and pricing
+- **Shopping Cart**: Add/remove items with real-time updates
+- **Help Center**: Comprehensive FAQ and customer support system
+
+### Technical Features
+- **Health Monitoring** (`/health`): Application health status
+- **Prometheus Metrics** (`/metrics`): Request duration, build info, and Node.js metrics
+- **API Endpoints**: RESTful API for products and cart management
+- **Responsive Design**: Mobile-friendly user interface
 
 ## Tech Stack
 
-- **Runtime**: Node.js 20
+- **Runtime**: Node.js 20 (ES Modules)
 - **Framework**: Express.js
 - **Monitoring**: Prometheus (prom-client)
-- **Containerization**: Docker
-- **CI/CD**: GitHub Actions
+- **Testing**: Jest with Supertest
+- **Containerization**: Docker (multi-platform: AMD64/ARM64)
+- **CI/CD**: GitHub Actions (3-stage pipeline)
+- **Infrastructure**: AWS EC2
 - **Registry**: Docker Hub
 
-## Local Development
+## Quick Start
 
 ### Prerequisites
 - Node.js 20+
 - Docker Desktop
 - Git
 
-### Running Locally
+### Local Development
 
 1. **Install dependencies**:
    ```bash
@@ -52,20 +63,26 @@ This project demonstrates a production-ready DevOps pipeline with:
    npm test
    ```
 
-The application will be available at `http://localhost:3000`
+The application will be available at [http://localhost:3000](http://localhost:3000)
 
-## Docker Setup
+## Docker Deployment
 
-### Build Docker Image Locally
+### Build and Run Locally
 ```bash
-docker build -t devops-demo .
-docker run -p 3000:3000 devops-demo
+# Build Docker image
+docker build -t techstore .
+
+# Run container
+docker run -p 3000:3000 techstore
 ```
 
 ### Using Docker Compose
 ```bash
 # Start the application
 docker compose up -d
+
+# View logs
+docker compose logs -f
 
 # Stop the application
 docker compose down
@@ -75,71 +92,89 @@ The application runs on port 3001 when using docker-compose (mapped from contain
 
 ## CI/CD Pipeline
 
-The GitHub Actions workflow (`.github/workflows/ci.yml`) automatically:
+The GitHub Actions workflow ([.github/workflows/ci.yml](.github/workflows/ci.yml)) implements a complete 3-stage deployment pipeline:
 
-1. Runs on every push to the repository
-2. Sets up Node.js 20 environment
-3. Installs dependencies and runs tests
-4. Builds multi-platform Docker images (linux/amd64, linux/arm64)
-5. Pushes images to Docker Hub with `staging` tag
+### Pipeline Stages
 
-### Setup Requirements
+#### Stage 1: Build & Test
+1. Checkout code from repository
+2. Set up Node.js 20 environment
+3. Install dependencies with `npm ci`
+4. Run Jest test suite
+5. Build multi-platform Docker images (linux/amd64, linux/arm64)
+6. Push to Docker Hub with tags:
+   - `tinluong043/devops-demo:staging`
+   - `tinluong043/devops-demo:<commit-sha>`
 
-1. **GitHub Secrets** (Settings → Secrets and variables → Actions):
-   - `DOCKERHUB_USER`: Your Docker Hub username
-   - `DOCKERHUB_PASS`: Your Docker Hub password or access token
+#### Stage 2: Deploy to Staging (Automatic)
+1. SSH into staging EC2 instance
+2. Pull Docker image by commit SHA
+3. Stop and remove old container
+4. Deploy new container on port 80
+5. Clean up old images
 
-2. **Docker Hub Repository**:
-   - Create a public repository named `devops-demo` on Docker Hub
+#### Stage 3: Deploy to Production (Manual Approval Required)
+1. Wait for manual approval via GitHub Environments
+2. SSH into production EC2 instance
+3. Deploy the same tested image from staging
+4. Update production container
+5. Clean up old images
 
-### Docker Image
+### Required GitHub Secrets
 
-The built image is available at:
-```
-docker.io/hanguyen1502/devops-demo:staging
-```
+Configure in Settings → Secrets and variables → Actions:
 
-## Deployment
+**Docker Hub:**
+- `DOCKERHUB_USER`: Docker Hub username
+- `DOCKERHUB_PASS`: Docker Hub password or access token
 
-### Test Environment (Local)
+**Staging EC2:**
+- `STAGING_EC2_HOST`: Staging server hostname/IP
+- `STAGING_EC2_USER`: SSH username (e.g., ubuntu)
+- `STAGING_EC2_SSH_KEY`: Private SSH key for staging server
 
-Using Docker Compose:
-```bash
-docker compose up -d
-curl http://localhost:3001/health
-```
+**Production EC2:**
+- `EC2_HOST`: Production server hostname/IP
+- `EC2_USER`: SSH username (e.g., ubuntu)
+- `EC2_SSH_KEY`: Private SSH key for production server
 
-### Production Environment (Cloud VM/EC2)
+### Production URL
+Live Production: http://52.62.52.80
 
-1. **Setup Docker on Ubuntu**:
-   ```bash
-   sudo apt-get update && sudo apt-get install -y docker.io
-   sudo usermod -aG docker $USER && newgrp docker
-   ```
+## API Documentation
 
-2. **Deploy Application**:
-   ```bash
-   docker pull docker.io/hanguyen1502/devops-demo:staging
-   docker run -d --name app -p 80:3000 --restart=always docker.io/hanguyen1502/devops-demo:staging
-   ```
+### Product Endpoints
 
-3. **Verify Deployment**:
-   ```bash
-   curl http://localhost/health
-   ```
+| Endpoint | Method | Description | Query Parameters |
+|----------|--------|-------------|------------------|
+| `/api/products` | GET | Get all products | `category`, `search` |
+| `/api/products/:id` | GET | Get product by ID | - |
 
-### Cloud Platform Options
+### Cart Endpoints
 
-- **AWS EC2**: t2.micro free tier (12 months)
-- **Oracle Cloud**: Always free tier (2 VMs)
-- **Google Cloud**: $300 credit with e2-micro free tier
-- **DigitalOcean**: $200 credit for 60 days
+| Endpoint | Method | Description | Headers |
+|----------|--------|-------------|---------|
+| `/api/cart` | GET | Get cart items | `x-session-id` (optional) |
+| `/api/cart` | POST | Add item to cart | `x-session-id` (optional) |
+| `/api/cart/:productId` | DELETE | Remove item from cart | `x-session-id` (optional) |
 
-## Monitoring
+### System Endpoints
 
-The application exposes Prometheus metrics at `/metrics` including:
-- HTTP request counters (by route, method, status)
-- Default Node.js metrics (memory, CPU, etc.)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check status |
+| `/api/ping` | GET | API ping with timestamp |
+| `/metrics` | GET | Prometheus metrics |
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Home page with featured products |
+| `/products/:category` | Category-filtered products |
+| `/product/:id` | Product detail page |
+| `/cart` | Shopping cart page |
+| `/help` | Help center with FAQ |
 
 ## Project Structure
 
@@ -147,46 +182,132 @@ The application exposes Prometheus metrics at `/metrics` including:
 .
 ├── .github/
 │   └── workflows/
-│       └── ci.yml          # GitHub Actions CI/CD pipeline
-├── .gitignore              # Git ignore rules
-├── Dockerfile              # Docker container configuration
-├── docker-compose.yml      # Docker Compose configuration
-├── package.json            # Node.js dependencies and scripts
-├── package-lock.json       # Locked dependency versions
-├── server.js               # Express application
-└── README.md               # Project documentation
+│       └── ci.yml              # CI/CD pipeline configuration
+├── public/
+│   ├── images/                 # Product images
+│   └── styles.css              # Application styles
+├── .gitignore                  # Git ignore rules
+├── Dockerfile                  # Docker container configuration
+├── docker-compose.yml          # Docker Compose configuration
+├── index.js                    # Application entry point
+├── server.js                   # Express app with routes and logic
+├── server.test.js              # Jest test suite
+├── package.json                # Dependencies and scripts
+├── package-lock.json           # Locked dependency versions
+└── README.md                   # This file
 ```
 
-## API Endpoints
+## npm Scripts
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/` | GET | Welcome message |
-| `/health` | GET | Health check status |
-| `/api/ping` | GET | API ping with timestamp |
-| `/metrics` | GET | Prometheus metrics |
+| Script | Command | Description |
+|--------|---------|-------------|
+| `start` | `node index.js` | Start production server |
+| `dev` | `node --watch index.js` | Start development server with auto-reload |
+| `test` | `NODE_OPTIONS=--experimental-vm-modules jest` | Run Jest tests |
+| `docker:build` | `docker build -t techstore .` | Build Docker image |
+| `docker:run` | `docker run -p 3000:3000 techstore` | Run Docker container |
 
-## Scripts
+## Monitoring
 
-- `npm start`: Start production server
-- `npm run dev`: Start development server with auto-reload
-- `npm test`: Run tests
+The application exposes Prometheus metrics at `/metrics` including:
 
-## Security Notes
+### Custom Metrics
+- `http_request_duration_seconds`: HTTP request duration histogram
+  - Labels: `route`, `method`, `status`
+  - Buckets: [0.01, 0.05, 0.1, 0.2, 0.5, 1, 2, 5]
+- `app_build_info`: Build metadata gauge
+  - Labels: `version`, `git_sha`
 
-- Never commit secrets or API keys
-- Use environment variables for sensitive configuration
-- Docker Hub credentials are stored as GitHub Secrets
-- Production deployments should use HTTPS
+### Default Metrics
+- Process CPU usage
+- Process memory usage
+- Node.js event loop metrics
+- Garbage collection metrics
+
+## Product Catalog
+
+Current products in the catalog:
+1. **iPhone 15 Pro** - $2,000
+2. **MacBook Pro 14"** - $1,999
+3. **Samsung Galaxy S24 Ultra** - $1,199
+4. **Dell XPS 13** - $1,299
+5. **iPad Pro 12.9"** - $1,099
+6. **AirPods Pro (2nd gen)** - $249
+
+## Deployment Guide
+
+### AWS EC2 Deployment
+
+1. **Launch EC2 Instance**:
+   - Ubuntu 22.04 LTS
+   - t2.micro or larger
+   - Open port 80 in security group
+
+2. **Install Docker**:
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y docker.io
+   sudo usermod -aG docker ubuntu
+   newgrp docker
+   ```
+
+3. **Deploy Application**:
+   ```bash
+   docker pull tinluong043/devops-demo:staging
+   docker run -d --name app -p 80:3000 --restart=always \
+     -e APP_VERSION=1.0.0 \
+     -e GIT_SHA=production \
+     tinluong043/devops-demo:staging
+   ```
+
+4. **Verify Deployment**:
+   ```bash
+   curl http://localhost/health
+   ```
+
+## Security Best Practices
+
+- ✅ Never commit secrets or API keys
+- ✅ Use GitHub Secrets for sensitive configuration
+- ✅ Docker images use official Node.js Alpine base
+- ✅ Production dependencies only in Docker image
+- ✅ Restart policy configured for high availability
+- ⚠️ Production deployments should use HTTPS/TLS
+- ⚠️ Consider implementing authentication for production
+
+## Testing
+
+The project includes comprehensive Jest tests covering:
+- Home page rendering
+- Health check endpoint
+- API ping endpoint
+- Prometheus metrics endpoint
+
+Run tests with:
+```bash
+npm test
+```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | 3000 |
+| `NODE_ENV` | Environment mode | production |
+| `APP_VERSION` | Application version | dev |
+| `GIT_SHA` | Git commit SHA | dev |
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+This is an educational project for demonstrating DevOps practices.
 
 ## License
 
-This project is for educational purposes demonstrating DevOps practices.
+MIT License - Educational purposes for SWE40006 course.
+
+## Authors
+
+**Group Melvin Final**
+- Course: SWE40006
+- Project: DevOps Final Project
+- Repository: https://github.com/Finn043/devops-project-final
