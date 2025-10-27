@@ -2,7 +2,7 @@
 
 A production-ready e-commerce web application for technology devices with complete CI/CD pipeline implementation.
 
-**Group Melvin Final - SWE40006 DevOps Project**
+**Group **Wed-16.30-MD-G1**- SWE40006 DevOps Project**
 
 ## Project Overview
 
@@ -321,14 +321,10 @@ npm test
 
 This is an educational project for demonstrating DevOps practices.
 
-## License
-
-MIT License - Educational purposes for SWE40006 course.
-
 ## Authors
 
-**Group:** **Wed-16.30-MD-G1**
+**Group: Wed-16.30-MD-G1**
 
-- Course: SWE40006
-- Project: DevOps Final Project
-- Repository: https://github.com/Finn043/devops-project-final
+- **Course: SWE40006**
+- **Project: DevOps Final Project**
+- **Repository: https://github.com/Finn043/devops-project-final**
